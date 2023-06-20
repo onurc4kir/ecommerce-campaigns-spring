@@ -40,9 +40,11 @@ spring.datasource.password=password
 - Use the `DELETE /campaigns/{id}` endpoint to delete campaigns.
 
 Campaigns are queried by profile-match if the user logged in. 
+### Postman Test
+You can download the postman-test-api.json file and open it on Postman.
 
 ### Roles
-There are 2 types of roles used for authorization ROLE_ADMIN and ROLE_USER. CRUD for the role and profession requires ROLE_ADMIN. Also ROLE_ADMIN is required for adding or updating a campaign. 
+There are 2 types of roles used for authorization ROLE_ADMIN and ROLE_USER. CRUD for the role and profession requires ROLE_ADMIN. Also, ROLE_ADMIN is required for adding or updating a campaign. 
 
 You can access detailed API documentation at `http://localhost:8080/swagger-ui.html` while the application is running.
 

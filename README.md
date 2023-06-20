@@ -39,6 +39,11 @@ spring.datasource.password=password
 - Use the `PUT /campaigns/{id}` endpoint to update campaigns.
 - Use the `DELETE /campaigns/{id}` endpoint to delete campaigns.
 
+Campaigns are queried by profile-match if the user logged in. 
+
+### Roles
+There are 2 types of roles used for authorization ROLE_ADMIN and ROLE_USER. CRUD for the role and profession requires ROLE_ADMIN. Also ROLE_ADMIN is required for adding or updating a campaign. 
+
 You can access detailed API documentation at `http://localhost:8080/swagger-ui.html` while the application is running.
 
 ## License

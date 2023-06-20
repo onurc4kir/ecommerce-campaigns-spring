@@ -29,7 +29,6 @@ public class CampaignController {
     }
 
     @GetMapping("")
-
     @Cacheable(value = "getCampaignsCache",keyGenerator = "campaignGetKeyGenerator")
     public ResponseEntity<?> getCampaigns(@RequestParam int page, @RequestParam int size) {
         PageRequest pageRequest = PageRequest.of(page, size);
@@ -74,7 +73,7 @@ public class CampaignController {
             throw new NotFoundException("Campaign not found!");
         }
         campaignRepository.delete(campaign);
-        return ResponseEntity.ok("Campaign deleted!");
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("")
@@ -91,7 +90,7 @@ public class CampaignController {
 
         campaignRepository.save(newCampaign);
 
-        return ResponseEntity.ok(newCampaign);
+        return ResponseEntity.status(201).body(newCampaign);
     }
     @PatchMapping("/{id}")
     @CacheEvict(value = "getCampaignsCache", allEntries = true)

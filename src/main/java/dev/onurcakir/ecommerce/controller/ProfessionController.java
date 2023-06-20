@@ -44,7 +44,7 @@ public class ProfessionController {
             throw new BadRequestException("Profession is already exists!");
         }
         final Profession savedProfession = professionRepository.save(new Profession(payload.getName()));
-        return ResponseEntity.ok(savedProfession);
+        return ResponseEntity.status(201).body(savedProfession);
     }
 
     @PatchMapping("/{id}")
@@ -62,6 +62,6 @@ public class ProfessionController {
             throw new NotFoundException("Profession not found!");
         }
         professionRepository.deleteById(id);
-        return ResponseEntity.ok("Profession deleted successfully!");
+        return ResponseEntity.noContent().build();
     }
 }

@@ -3,7 +3,6 @@ package dev.onurcakir.ecommerce.controller;
 import dev.onurcakir.ecommerce.exception.model.BadRequestException;
 import dev.onurcakir.ecommerce.exception.model.NotFoundException;
 import dev.onurcakir.ecommerce.model.Role;
-import dev.onurcakir.ecommerce.payload.request.RoleCreatePayload;
 import dev.onurcakir.ecommerce.repository.RoleRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -39,7 +38,7 @@ public class RoleController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createRole(@RequestBody RoleCreatePayload payload) {
+    public ResponseEntity<Role> createRole(@RequestBody Role payload) {
         if (roleRepository.existsByName(payload.getName())) {
             throw new BadRequestException("Role is already exists!");
         }
@@ -48,7 +47,7 @@ public class RoleController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<?> updateRole(@PathVariable Long id, @RequestBody Role role) {
+    public ResponseEntity<Role> updateRole(@PathVariable Long id, @RequestBody Role role) {
         if (!roleRepository.existsById(id)) {
             throw new NotFoundException("Role not found!");
         }
@@ -57,11 +56,11 @@ public class RoleController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteRole(@PathVariable Long id) {
+    public ResponseEntity deleteRole(@PathVariable Long id) {
         if (!roleRepository.existsById(id)) {
             throw new NotFoundException("Role not found!");
         }
         roleRepository.deleteById(id);
-        return ResponseEntity.ok("Role deleted successfully!");
+        return ResponseEntity.noContent().build();
     }
 }

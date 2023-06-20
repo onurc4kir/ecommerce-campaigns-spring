@@ -74,7 +74,7 @@ public class UserController {
             throw new NotFoundException("User not found!");
         }
         userRepository.deleteById(id);
-        return ResponseEntity.ok(new MessageResponse("User deleted successfully!"));
+        return ResponseEntity.noContent().build();
     }
 
 }

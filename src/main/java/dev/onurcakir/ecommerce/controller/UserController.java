@@ -8,11 +8,14 @@ import dev.onurcakir.ecommerce.payload.response.MessageResponse;
 import dev.onurcakir.ecommerce.repository.ProfessionRepository;
 import dev.onurcakir.ecommerce.repository.UserRepository;
 import dev.onurcakir.ecommerce.security.service.UserDetailsImpl;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/user")
@@ -27,11 +30,17 @@ public class UserController {
     }
 
     @GetMapping("/me")
+    @RolesAllowed({"ROLE_USER", "ROLE_ADMIN"})
     public ResponseEntity<User> getCurrentUser() {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final String mail = ((UserDetailsImpl) authentication.getPrincipal()).getEmail();
-        final User user = userRepository.findByEmail(mail).get();
-        return ResponseEntity.ok(user);
+        final Optional<User> user = userRepository.findByEmail(mail);
+
+        if (user.isEmpty()) {
+            throw new NotFoundException("User not found!");
+        }
+
+        return ResponseEntity.ok(user.get());
     }
 
     @PostMapping("/me")
@@ -39,18 +48,22 @@ public class UserController {
         final Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         final String mail = ((UserDetailsImpl) authentication.getPrincipal()).getEmail();
 
-        final User user = userRepository.findByEmail(mail).get();
+        final Optional<User> userOptional = userRepository.findByEmail(mail);
+        if (userOptional.isEmpty()){
+            throw new NotFoundException("User not found!");
+        }
+        final User user = userOptional.get();
 
         user.setFirstName(payload.getFirstName());
         user.setLastName(payload.getLastName());
         user.setAge(payload.getAge());
 
-        if (payload.getProfessionId() != 0 && payload.getProfessionId() != user.getProfession().getId()){
-            final Profession newProfession = professionRepository.findById(payload.getProfessionId()).get();
-            if (newProfession == null){
+        if (payload.getProfessionId() != 0){
+            final Optional<Profession> newProfession = professionRepository.findById(payload.getProfessionId());
+            if (newProfession.isEmpty()){
                 throw new NotFoundException("Profession not found!");
             }
-            user.setProfession(newProfession);
+            user.setProfession(newProfession.get());
         }
 
         userRepository.save(user);
@@ -63,8 +76,11 @@ public class UserController {
         if (!userRepository.existsById(id)) {
             throw new NotFoundException("User not found!");
         }
-        final User user = userRepository.findById(id).get();
-        return ResponseEntity.ok(user);
+        final Optional<User> user = userRepository.findById(id);
+        if (user.isEmpty()) {
+            throw new NotFoundException("User not found!");
+        }
+        return ResponseEntity.ok(user.get());
     }
 
     @DeleteMapping("/{id}")

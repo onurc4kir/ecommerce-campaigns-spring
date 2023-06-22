@@ -82,6 +82,7 @@ public class WebSecurityConfig {
                     a.requestMatchers(AUTH_WHITELIST).permitAll();
                     //access campaign if it is get method
                     a.requestMatchers(HttpMethod.GET,"/api/v1/campaign","/api/v1/campaign/**").permitAll();
+                    a.requestMatchers(HttpMethod.GET,"/api/v1/user/me").permitAll();
                     a.anyRequest().authenticated();
                 });
         return http.build();

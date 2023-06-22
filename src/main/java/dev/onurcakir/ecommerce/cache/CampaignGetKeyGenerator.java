@@ -11,9 +11,9 @@ public class CampaignGetKeyGenerator implements KeyGenerator {
     @Override
     public Object generate(Object target, Method method, Object... params) {
         StringBuilder key = new StringBuilder();
-        key.append(params[0].toString());
-        key.append("_");
-        key.append(params[1].toString());
+        for(int i = 0; i<params.length;i++){
+            key.append(String.format("%d:%s_", i, params[i].toString()));
+        }
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated() && !auth.getPrincipal().equals("anonymousUser")) {

@@ -24,9 +24,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -83,7 +81,7 @@ public class AuthController {
         Set<Role> roles = new HashSet<>();
 
         roles.add(roleRepository
-                .findRoleByName("user")
+                .findRoleByName("ROLE_USER")
                 .orElseThrow(() -> new NotFoundException("Role is not found.")));
 
         user.setRoles(roles);
